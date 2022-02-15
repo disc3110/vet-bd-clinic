@@ -35,3 +35,82 @@ SELECT *
    WHERE weight_kg
    BETWEEN 10.4 
    AND 17.3; 
+
+   /* update the animals table by setting the species column to unspecified. Verify that change was made. Then roll back the change and verify that species columns went back to the state before tranasction. */
+ BEGIN;
+ UPDATE animals SET species = 'unspecified';
+ SELECT species from animals
+ ROLLBACK;
+ SELECT species from animals
+
+ /* Update the animals table by setting the species column to digimon for all animals that have a name ending in mon or pokemon the others */
+ BEGIN;
+ UPDATE animals
+ SET species = 'digimon'
+ WHERE name LIKE '%mon';
+
+ UPDATE animals
+ SET species = 'pokemon'
+ WHERE species IS NULL;
+ COMMIT;
+ SELECT species from animals
+
+ /* delete all records in the animals table, then roll back the transaction */
+ BEGIN;
+ DELETE FROM animals
+ ROLLBACK;
+
+
+ /* Delete all animals born after Jan 1st, 2022.
+ Create a savepoint for the transaction.
+ Update all animals' weight to be their weight multiplied by -1.
+ Rollback to the savepoint
+ Update all animals' weights that are negative to be their weight multiplied by -1.
+ Commit transaction */
+ BEGIN;
+
+ DELETE FROM animals
+ WHERE date_of_birth > 'jan/01/2022';
+
+ SAVEPOINT save1;
+
+ UPDATE animals
+ SET weight_kg = weight_kg * -1;
+
+ ROLLBACK TO save1;
+
+ UPDATE animals
+ SET weight_kg = weight_kg * -1
+ WHERE weight_kg < 0;
+
+ SELECT * FROM animals;
+
+ COMMIT; 
+
+ /* Total animals */
+ SELECT COUNT (*)
+ FROM animals;
+
+ /* Total animals that never tried to escpaed */
+ SELECT COUNT (*)
+ FROM animals
+ WHERE escape_attempts = 0;
+
+ /* Avarage weight of animals */
+ SELECT AVG(weight_kg) FROM animals; 
+
+ /* Total escape attempts by neutered */
+ SELECT neutered, SUM (escape_attempts)
+ FROM animals
+ GROUP BY neutered;
+
+ /* MAX and MIN weight by species */
+ SELECT species, MIN(weight_kg), MAX(weight_kg)
+ FROM animals
+ GROUP BY species; 
+
+ /* AVG escape attempts between dates */
+ SELECT species, AVG(escape_attempts)
+ FROM animals
+ WHERE date_of_birth BETWEEN 'jan/01/1990' AND 'DEC/31/2000'
+ GROUP BY species;
