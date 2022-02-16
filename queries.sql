@@ -180,3 +180,78 @@ SELECT *
      ON owners.id = animals.owner_id
      group by owners.full_name 
      order by count(*) desc limit 1; 
+
+/* Last animal seen by william */
+  SELECT visits.date, animals.name, vets."name"
+  FROM visits
+  JOIN animals  ON visits.animal_id = animals.id 
+  JOIN vets ON vets.id = visits.vet_id 
+  where vets."name" = 'William Tatcher'
+  order by visits."date" desc limit 1; 
+
+  /* different animal that stephanie mendez sees */
+  SELECT count(distinct animal_id), vets."name"
+  FROM visits 
+  JOIN animals ON visits.animal_id = animals.id 
+  JOIN vets ON visits.vet_id = vets.id 
+  where vets."name" = 'Stephanie Mendez'
+  group by vets."name";
+
+  /* All vets and their specialtities (Even the ones with no one)*/
+  SELECT vets."name", species."name" 
+  FROM vets
+  left JOIN specializations on specializations.vet_id = vets.id 
+  left join species on specializations.species_id = species.id ;
+
+  /* Visits to stephanie between april 1st and august 30th */
+  SELECT visits.date, animals.name, vets.name
+  FROM visits
+  JOIN animals ON visits.animal_id = animals.id 
+  JOIN vets ON visits.vet_id = vets.id
+  where vets."name" = 'Stephanie Mendez' and visits."date" between 'apr-01-2020' and 'aug-30-2020';
+
+  /* What animals has the most visits to vets*/
+  SELECT max(visitCount.count), visitCount.name
+
+  FROM (
+     SELECT COUNT(visits."date"), animals."name" 
+     FROM visits
+     JOIN animals ON visits.animal_id = animals.id
+     GROUP BY animals."name"
+  ) AS visitCount
+
+  GROUP BY visitCount.name, visitCount.count
+  ORDER BY visitCount.count DESC LIMIT 1;
+
+  /* Mary's first animal visit */
+  SELECT visits.date, animals.name, vets."name"
+  FROM visits
+  JOIN animals ON visits.animal_id = animals.id 
+  JOIN vets ON visits.vet_id = vets.id
+  where vets."name" = 'Maisy Smith'
+  order by visits."date" asc limit 1;
+
+  /* Details on most recent animal visit */
+  SELECT visits, animals, vets
+  FROM visits
+  JOIN animals ON visits.animal_id = animals.id 
+  JOIN vets ON visits.vet_id = vets.id
+  order by visits."date" desc limit 1;
+
+  /* Visits that were treated by non specialist */
+  SELECT count(*) 
+  FROM vets 
+  JOIN visits ON vets.id = visits.vet_id
+  LEFT JOIN specializations ON vets.id = specializations.vet_id 
+  LEFT JOIN animals ON visits.animal_id = animals.id 
+  WHERE specializations.species_id != animals.species_id;
+
+  /* What speciality maisy gets the most */
+  SELECT COUNT(visits.animal_id), species."name"
+  FROM visits
+  JOIN animals on visits.animal_id = animals.id 
+  JOIN species on animals.species_id = species.id
+  JOIN vets on visits.vet_id = vets.id
+  WHERE vets."name" = 'Maisy Smith'
+  GROUP BY  species."name"
+  ORDER BY COUNT(visits.animal_id ) DESC LIMIT 1;

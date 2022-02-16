@@ -30,3 +30,28 @@ CREATE TABLE owners (
  ALTER TABLE animals ADD owner_id int;
  ALTER TABLE animals ADD CONSTRAINT animals_fk_1 FOREIGN KEY (owner_id) REFERENCES owners(id);
  ALTER TABLE animals ADD CONSTRAINT animals_fk_2 FOREIGN KEY (species_id) REFERENCES species(id);
+
+ CREATE TABLE vets (
+ id int NOT NULL GENERATED ALWAYS AS IDENTITY,
+ name varchar(100) NULL,
+ age int NULL,
+ date_of_graduation date NULL,
+ CONSTRAINT vets_pk PRIMARY KEY (id)
+ ); 
+
+ CREATE TABLE specializations (
+ vet_id int NOT NULL,
+ species_id int NOT NULL,
+ CONSTRAINT specializations_pk PRIMARY KEY (vet_id, species_id),
+ CONSTRAINT specializations_fk FOREIGN KEY (vet_id) REFERENCES vets(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+ CONSTRAINT specializations_fk_1 FOREIGN KEY (species_id) REFERENCES species(id) ON DELETE RESTRICT ON UPDATE CASCADE
+ );
+
+ CREATE TABLE visits (
+ "date" date NULL,
+ vet_id int NULL,
+ animal_id int NULL,
+ CONSTRAINT visits_pk PRIMARY KEY (vet_id, animal_id),
+ CONSTRAINT visits_fk_1 FOREIGN KEY (vet_id) REFERENCES vets(id) ON DELETE CASCADE ON UPDATE CASCADE,
+ CONSTRAINT visits_fk FOREIGN KEY (animal_id) REFERENCES animals(id) ON DELETE CASCADE ON UPDATE CASCADE
+ ); 
