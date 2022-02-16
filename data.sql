@@ -102,3 +102,81 @@ INSERT INTO animals (
        , neutered
        , weight_kg
    ) VALUES ('Blossom', 'oct/13/1998', 3, TRUE, 17); 
+
+   INSERT INTO owners (full_name,age)
+     VALUES ('Sam Smith',34);
+
+   INSERT INTO owners (full_name,age)
+     VALUES ('Jennifer Orwell',19);
+
+   INSERT INTO owners (full_name,age)
+     VALUES ('Bob',45);
+
+   INSERT INTO owners (full_name,age)
+     VALUES ('Melody Pond',77);
+
+   INSERT INTO owners (full_name,age)
+     VALUES ('Dean Winchester',14);
+
+   INSERT INTO owners (full_name,age)
+     VALUES ('Jodie Whittaker',38);
+
+
+   INSERT INTO species ("name")
+     VALUES ('Digimon');
+
+   INSERT INTO species ("name")
+     VALUES ('Pokemon');
+
+   UPDATE animals
+   SET species_id = 1
+   WHERE animals.name ~'[A-Za-z]+mon';
+
+   UPDATE animals
+   SET species_id = 2
+   WHERE animals.species_id IS null;
+
+
+   UPDATE animals
+   SET owner_id = owners.id
+   FROM owners
+   WHERE animals.name = 'Agumon'
+     AND owners.full_name = 'Sam Smith';
+
+
+   UPDATE animals
+   SET owner_id = owners.id
+   FROM owners
+   WHERE animals.name = 'Gabumon'
+     AND owners.full_name = 'Jennifer Orwell'
+     OR animals.name = 'Pikachu'
+     AND owners.full_name = 'Jennifer Orwell';
+
+
+   UPDATE animals
+   SET owner_id = owners.id
+   FROM owners
+   WHERE animals.name = 'Devimon'
+     AND owners.full_name = 'Bob'
+     OR animals.name = 'Plantmon'
+     AND owners.full_name = 'Bob';
+
+
+   UPDATE animals
+   SET owner_id = owners.id
+   FROM owners
+   WHERE animals.name = 'Charmander'
+     AND owners.full_name = 'Melody Pond'
+     OR animals.name = 'Squirtle'
+     AND owners.full_name = 'Melody Pond'
+     OR animals.name = 'Blossom'
+     AND owners.full_name = 'Melody Pond';
+
+
+   UPDATE animals
+   SET owner_id = owners.id
+   FROM owners
+   WHERE animals.name = 'Angemon'
+     AND owners.full_name = 'Dean Winchester'
+     OR animals.name = 'Boarmon'
+     AND owners.full_name = 'Dean Winchester';
