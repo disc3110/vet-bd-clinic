@@ -4,6 +4,10 @@
 
 > A project which contain all the necessary files and SQL queries in order to create and audit a SQL database
 
+diagram
+![drawSQL-export-2022-02-22_12_59](https://user-images.githubusercontent.com/55037686/155200398-5fc947e8-5f08-400f-8318-078c35b0b65f.png)
+
+
 ## Built With
 
 - SQL 
